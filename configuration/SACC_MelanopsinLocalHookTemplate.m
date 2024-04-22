@@ -1,7 +1,7 @@
-function SACC_ModelingLocalHook
-% SACC_Modeling
+function SACC_MelanopsinLocalHook
+% SACC_Melanopsin
 %
-% Configure things for working on the SACC_Modeling project.
+% Configure things for working on the SACC_Melanopsin project.
 %
 % For use with the ToolboxToolbox.  If you copy this into your
 % ToolboxToolbox localToolboxHooks directory (by default,
@@ -13,7 +13,7 @@ function SACC_ModelingLocalHook
 % to match what is true on your computer.
 
 %% Define project
-projectName = 'SACC_Modeling';
+projectName = 'SACC_Melanopsin';
 
 %% Say hello
 fprintf('Running %s local hook\n',projectName);
@@ -60,12 +60,6 @@ setpref(projectName,'LEDSpectraDir',fullfile(baseDir,'SACC_materials','JandJProj
 % Calibration
 setpref('BrainardLabToolbox','CalDataFolder',fullfile(baseDir,'SACC_materials','Calibration'));
 
-% Data dir
-setpref(projectName,'TestDataFolder',fullfile(baseDir,'SACC_datadev','TestData'));
-
-% Main experiment data dir (as of 10/14/22)
-setpref(projectName,'SACCData',fullfile(baseDir,'SACC_data'));
-
 % Check data dir (This is for screen stability and channel additivity data)
 setpref(projectName,'CheckDataFolder',fullfile(baseDir,'SACC_materials','JandJProjector','CheckData'));
 
@@ -75,10 +69,5 @@ setpref(projectName,'SACCMaterials',fullfile(baseDir,'SACC_materials'));
 % David's melanopsion work
 setpref(projectName,'SACCMelanopsin',fullfile(baseDir,'SACC_melanopsin'));
 
-% We will save the final results in this directory (as of 10/13/23).
-setpref(projectName,'SACCAnalysisFinal',fullfile(baseDir,'SACC_analysis_final'));
-
-% Modleing output etc. dir
-setpref(projectName('SACCModeling'),fullfile(baseDir,'SACC_modeling'));
 
 
