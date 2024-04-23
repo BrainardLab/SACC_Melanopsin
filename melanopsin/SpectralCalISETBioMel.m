@@ -27,6 +27,22 @@ end
 
 %}
 
+%% For SACC proposal
+%{
+clear;
+conditionNameList = {'MelDirected1'}; % 'IsochromaticControl'};
+sineFreqCyclesPerDegList = [0.2 3]; % [0.2 1 2 5 10];
+gaborSdDeg = 100;
+stimulusSizeDeg = 2;
+stimConeEccDeg = 0;
+
+for cc = 1:length(conditionNameList)
+    for ss = 1:length(sineFreqCyclesPerDegList)
+        lmsmelContrastNominal(:,ss,cc) = SpectralCalISETBioMel(conditionNameList{cc},stimConeEccDeg,sineFreqCyclesPerDegList(ss), ...
+            gaborSdDeg,stimulusSizeDeg);
+    end
+end
+%}
 
 %% Baseline example
 %{
