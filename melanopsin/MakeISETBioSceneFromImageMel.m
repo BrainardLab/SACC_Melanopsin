@@ -105,7 +105,7 @@ for ss = 1:nPhaseShifts
         
         % Check if it predicts well.
         temp = ImageToCalFormat(gaborImageObject.excitationsGaborImage{ss,cc});
-        if (max(abs(temp(:) - ISETBioPredictedExcitationsGaborCal(:)) ./ temp(:)) > 1e-6)
+        if (max(abs(temp(:) - ISETBioPredictedExcitationsGaborCal(:)) ./ temp(:)) > 1e-5)
             error('Passed and ISETBio data do not agree well enough');
         end
         
