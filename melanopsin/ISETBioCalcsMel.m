@@ -291,6 +291,60 @@ dMacISETBio = 0;
 
 %}
 
+%% SACC proposal examples
+%{
+clear;
+conditionNameList = {'MelDirected1'}; % {'MelDirected1', 'IsochromaticControl'};
+sineFreqCyclesPerDegList = [3];
+gaborSdDeg = 100;
+stimulusSizeDeg = 2;
+stimConeEccDeg = 0;
+
+fieldSizeDeg = 2;
+eccXDegList = 0; %eccXDegList = [0 -5 -10 -15 -20];
+aoRender = false;
+noLCA = false;
+ageISETBioList = 32; %[20 32 60];
+dLensISETBioList = 0; %[-18.7 0 18.7];
+dMacISETBioList = 0; % [1.5*-36.5 -36.5 -36.5/2 0 36.5/2 36.5 1.5*36.5];
+
+for cc = 1:length(conditionNameList)
+    for ss = 1:length(sineFreqCyclesPerDegList)
+        for ee = 1:length(eccXDegList)
+            for aa = 1:length(ageISETBioList)
+                for ll = 1:length(dLensISETBioList)
+                    for mm = 1:length(dMacISETBioList)
+                        lmsConeContrast(:,cc,ss,ee,aa,ll,mm) = ISETBioCalcsMel(conditionNameList{cc},stimConeEccDeg,sineFreqCyclesPerDegList(ss), ...
+                                gaborSdDeg,stimulusSizeDeg, ...
+                                fieldSizeDeg, ...
+                                eccXDegList(ee), ...
+                                aoRender, noLCA, ...
+                                ageISETBioList(aa), dLensISETBioList(ll), dMacISETBioList(mm) ...
+                            );
+                    end
+                end
+            end
+        end
+    end
+end
+
+% Plot of results
+lmsContrastByDMac = squeeze(lmsConeContrast(:,:,:,:,:,:,1:end));
+figure; clf; hold on;
+plot(dMacISETBioList,100*lmsContrastByDMac(1,:),'ro','MarkerFaceColor','r','MarkerSize',12);
+plot(dMacISETBioList,100*lmsContrastByDMac(2,:),'go','MarkerFaceColor','g','MarkerSize',12);
+plot(dMacISETBioList,100*lmsContrastByDMac(3,:),'bo','MarkerFaceColor','b','MarkerSize',12);
+plot(dMacISETBioList,100*lmsContrastByDMac(1,:),'r','LineWidth',2);
+plot(dMacISETBioList,100*lmsContrastByDMac(2,:),'g','LineWidth',2);
+plot(dMacISETBioList,100*lmsContrastByDMac(3,:),'b','LineWidth',2);
+set(gca,'FontName','Helvetica','FontSize',18);
+xlabel('Macular Pigment Density Adj (Percent)','FontName','Helvetica','FontSize',20);
+ylabel('Contrast (percent)','FontName','Helvetica','FontSize',20);
+legend({'L cones','M cones','S cones'},'FontName','Helvetica','FontSize',14,'Location','NorthWest');
+ylim([0 10]);
+
+%}
+
 % ISETBioCalcsMel
 function [lmsConeContrast] = ISETBioCalcsMel(conditionName,stimConeEccDeg,sineFreqCyclesPerDeg, ...
             gaborSdDeg,stimulusSizeDeg, ...
@@ -551,8 +605,12 @@ end
 
 %% Compute optical image
 ss = 1; cc = 1;
-theConeMosaic.PSF = oiSet(theConeMosaic.PSF,'lens',lensObject);
-theOI = oiCompute(theData.ISETBioGaborObject.ISETBioGaborScene{ss,cc}, theConeMosaic.PSF);
+
+% Set the lens we want first
+theConeMosaic.PSF = oiSet(theConeMosaic.PSF,'optics lens',lensObject);
+
+% And then compute
+theOI = oiCompute(theConeMosaic.PSF, theData.ISETBioGaborObject.ISETBioGaborScene{ss,cc});
 
 % Some plots
 sampledWavelengths = [420:40:700];
@@ -718,7 +776,7 @@ if (VERIFY_ISETBIO_FUNDAMENTALS)
 
     for ww = 1:length(theData.colorDirectionParams.wls)
         % Compute retinal image
-        oiComputed{ww} = oiCompute(scene{ww}, theConeMosaic.PSF);
+        oiComputed{ww} = oiCompute(theConeMosaic.PSF,scene{ww});
 
         % Compute noise free cone excitations
         coneExcitations{ww} = theConeMosaic.Mosaic.compute(oiComputed{ww},'nTrials', 1);
