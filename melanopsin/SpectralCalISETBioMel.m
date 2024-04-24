@@ -30,7 +30,7 @@ end
 %% For SACC proposal
 %{
 clear; close all;
-conditionNameList = {'MelDirected1', 'MelDirected2', 'MelDirected3', 'MelDirected4', 'MelDirected5'}; % 'IsochromaticControl'};
+conditionNameList = {'MelDirected1'} %, 'MelDirected2', 'MelDirected3', 'MelDirected4', 'MelDirected5'}; % 'IsochromaticControl'};
 sineFreqCyclesPerDegList = [1]; % [0.2 1 2 5 10];
 gaborSdDeg = 100;
 stimulusSizeDeg = 4;
