@@ -39,7 +39,9 @@ function colorDirectionParams = SetupColorDirectionMel(conditionName,options)
 
 %% Set parameters.
 arguments
-    conditionName {mustBeMember(conditionName,{'MelDirected1','IsochromaticControl'})}
+    conditionName {mustBeMember(conditionName,{'MelDirected1', 'MelDirected2', ...
+        'MelDirected3', 'MelDirected4', 'MelDirected5', ...
+        'IsochromaticControl'})}
     options.spatialGaborTargetContrast (1,1) = 0.15
     options.targetScreenPrimaryContrasts (1,1) = 0.15
     options.targetLambda (1,1) = 0.2
@@ -119,6 +121,59 @@ switch (colorDirectionParams.conditionName)
         colorDirectionParams.B_natural{1} = colorDirectionParams.B_naturalRaw;
         colorDirectionParams.B_natural{2} = colorDirectionParams.B_naturalRaw;
         colorDirectionParams.B_natural{3} = colorDirectionParams.B_naturalRaw;
+    
+    case 'MelDirected2' 
+        % Match MelDirected1 for basics
+        optionsArgs = struct2pairs(options);
+        colorDirectionParams = SetupColorDirectionMel('MelDirected1',optionsArgs{:});
+
+        % Target color direction and max contrasts.
+        %
+        % This is the basic desired modulation direction positive excursion. We go
+        % equally in positive and negative directions.  Make this unit vector
+        % length, as that is good convention for contrast.
+        colorDirectionParams.targetStimulusContrastDir = [0.5 0.5 0.5 1]';
+        colorDirectionParams.targetStimulusContrastDir = colorDirectionParams.targetStimulusContrastDir / norm(colorDirectionParams.targetStimulusContrastDir);
+        
+     case 'MelDirected3' 
+        % Match MelDirected1 for basics
+        optionsArgs = struct2pairs(options);
+        colorDirectionParams = SetupColorDirectionMel('MelDirected1',optionsArgs{:});
+
+        % Target color direction and max contrasts.
+        %
+        % This is the basic desired modulation direction positive excursion. We go
+        % equally in positive and negative directions.  Make this unit vector
+        % length, as that is good convention for contrast.
+        colorDirectionParams.targetStimulusContrastDir = [0.5 0.5 0.5 -1]';
+        colorDirectionParams.targetStimulusContrastDir = colorDirectionParams.targetStimulusContrastDir / norm(colorDirectionParams.targetStimulusContrastDir);
+
+    case 'MelDirected4'
+        % Match MelDirected1 for basics
+        optionsArgs = struct2pairs(options);
+        colorDirectionParams = SetupColorDirectionMel('MelDirected1',optionsArgs{:});
+
+        % Target color direction and max contrasts.
+        %
+        % This is the basic desired modulation direction positive excursion. We go
+        % equally in positive and negative directions.  Make this unit vector
+        % length, as that is good convention for contrast.
+        colorDirectionParams.targetStimulusContrastDir = [0.5 0.5 0.5 0]';
+        colorDirectionParams.targetStimulusContrastDir = colorDirectionParams.targetStimulusContrastDir / norm(colorDirectionParams.targetStimulusContrastDir);
+    
+    case 'MelDirected5'
+        % Match MelDirected1 for basics
+        optionsArgs = struct2pairs(options);
+        colorDirectionParams = SetupColorDirectionMel('MelDirected1',optionsArgs{:});
+
+        % Target color direction and max contrasts.
+        %
+        % This is the basic desired modulation direction positive excursion. We go
+        % equally in positive and negative directions.  Make this unit vector
+        % length, as that is good convention for contrast.
+        colorDirectionParams.targetStimulusContrastDir = [0.5 0.5 1 0]';
+        colorDirectionParams.targetStimulusContrastDir = colorDirectionParams.targetStimulusContrastDir / norm(colorDirectionParams.targetStimulusContrastDir);
+
     case 'IsochromaticControl'
         % Target color direction and max contrasts.
         %

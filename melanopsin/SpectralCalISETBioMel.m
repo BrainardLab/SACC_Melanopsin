@@ -29,12 +29,12 @@ end
 
 %% For SACC proposal
 %{
-clear;
-conditionNameList = {'MelDirected1'}; % 'IsochromaticControl'};
-sineFreqCyclesPerDegList = [0.2 3]; % [0.2 1 2 5 10];
+clear; close all;
+conditionNameList = {'MelDirected1', 'MelDirected2', 'MelDirected3', 'MelDirected4', 'MelDirected5'}; % 'IsochromaticControl'};
+sineFreqCyclesPerDegList = [1]; % [0.2 1 2 5 10];
 gaborSdDeg = 100;
-stimulusSizeDeg = 2;
-stimConeEccDeg = 0;
+stimulusSizeDeg = 4;
+stimConeEccDeg = 5;
 
 for cc = 1:length(conditionNameList)
     for ss = 1:length(sineFreqCyclesPerDegList)
@@ -88,7 +88,7 @@ close all;
 %
 % Set up color direction parameters by its condition name.
 switch (conditionName)    
-    case 'MelDirected1'
+    case {'MelDirected1' 'MelDirected2' 'MelDirected3' 'MelDirected4' 'MelDirected5'}
         targetScreenPrimaryContrasts = 0.15;
         spatialGaborTargetContrast = 0.20;
     case 'IsochromaticControl'
@@ -354,7 +354,7 @@ SRGBImage = uint8(CalFormatToImage(SRGBCal,stimulusN,stimulusN));
 
 % Show the SRGB image
 figure; imshow(SRGBImage);
-title('SRGB Gabor Image');
+title([conditionName ': SRGB Gabor Image'],'FontName','Helvetiaca','FontSize',20);
 imwrite(SRGBImage,fullfile(outputDir,'sRGBImage.tiff'),'tiff');
 
 %% L plane image as grayscale sRGB
@@ -365,7 +365,7 @@ scaleFactor = mean(predictedLPlaneSRGBPlaneCal(:));
 SRGBLPlaneCal = SRGBGammaCorrect(SRGBLPlanePrimaryCal/(2*scaleFactor),0);
 SRGBLPlaneImage = uint8(CalFormatToImage(SRGBLPlaneCal,stimulusN,stimulusN));
 figure; imshow(SRGBLPlaneImage);
-title('SRGB L Plane Gabor Image');
+title([conditionName ': SRGB L Plane Gabor Image'],'FontName','Helvetiaca','FontSize',20);
 imwrite(SRGBLPlaneImage,fullfile(outputDir,'sRGBLPlaneImage.tiff'),'tiff');
 
 %% M plane image as grayscale sRGB
@@ -376,7 +376,7 @@ scaleFactor = mean(predictedMPlaneSRGBPlaneCal(:));
 SRGBMPlaneCal = SRGBGammaCorrect(SRGBMPlanePrimaryCal/(2*scaleFactor),0);
 SRGBMPlaneImage = uint8(CalFormatToImage(SRGBMPlaneCal,stimulusN,stimulusN));
 figure; imshow(SRGBMPlaneImage);
-title('SRGB M Plane Gabor Image');
+title([conditionName ': SRGB M Plane Gabor Image'],'FontName','Helvetiaca','FontSize',20);
 imwrite(SRGBMPlaneImage,fullfile(outputDir,'sRGBMPlaneImage.tiff'),'tiff');
 
 %% S plane image as grayscale sRGB
@@ -387,7 +387,7 @@ scaleFactor = mean(predictedSPlaneSRGBPlaneCal(:));
 SRGBSPlaneCal = SRGBGammaCorrect(SRGBSPlanePrimaryCal/(2*scaleFactor),0);
 SRGBSPlaneImage = uint8(CalFormatToImage(SRGBSPlaneCal,stimulusN,stimulusN));
 figure; imshow(SRGBSPlaneImage);
-title('SRGB S Plane Gabor Image');
+title([conditionName ': SRGB S Plane Gabor Image'],'FontName','Helvetiaca','FontSize',20);
 imwrite(SRGBSPlaneImage,fullfile(outputDir,'sRGBSPlaneImage.tiff'),'tiff');
 
 %% Mel plane image as grayscale sRGB
@@ -398,13 +398,13 @@ scaleFactor = mean(predictedMelPlaneSRGBPlaneCal(:));
 SRGBMelPlaneCal = SRGBGammaCorrect(SRGBMelPlanePrimaryCal/(2*scaleFactor),0);
 SRGBMelPlaneImage = uint8(CalFormatToImage(SRGBMelPlaneCal,stimulusN,stimulusN));
 figure; imshow(SRGBMelPlaneImage);
-title('SRGB Mel Plane Gabor Image');
+title([conditionName ': SRGB Mel Plane Gabor Image'],'FontName','Helvetiaca','FontSize',20);
 imwrite(SRGBMelPlaneImage,fullfile(outputDir,'sRGBMelPlaneImage.tiff'),'tiff');
 
 %% Show the settings image
 figure; clf;
 imshow(gaborImageObject.settingsGaborImage{ss,cc});
-title('Image of settings');
+title([conditionName ': Image of settings'],'FontName','Helvetiaca','FontSize',20);
 imwrite(gaborImageObject.settingsGaborImage{ss,cc},fullfile(outputDir,'settingsImage.tiff'),'tiff');
 
 %% Plot slice through predicted LMS and Mel contrast image.
@@ -421,6 +421,8 @@ legend({sprintf('L: %0.1f%%',100*lContrastNominal), sprintf('M: %0.1f%%',100*mCo
     sprintf('S: %0.1f%%',100*sContrastNominal), sprintf('Mel: %0.1f%%',100*melContrastNominal)},'FontName','Helvetiaca','FontSize',12,'Location','SouthEast');
 xlabel('Relative Position (deg)','FontName','Helvetiaca','FontSize',18);
 ylabel('Nominal Contrast','FontName','Helvetiaca','FontSize',18);
+title([conditionName ': Photoreceptor contrasts'],'FontName','Helvetiaca','FontSize',20);
+
 saveas(gcf,fullfile(outputDir,'LMSMelGaborSlice.tiff'),'tiff');
 % tempCal = ImageToCalFormat(gaborImageObject.contrastGaborImage{ss,cc});
 % max(tempCal,[],2)
@@ -482,11 +484,10 @@ plot(colorDirectionParams.wls, spd1,'-','LineWidth',4,'Color',[1 0 0]);
 plot(colorDirectionParams.wls, spd2,'-','LineWidth',4,'Color',[0 0 0]);
 xlabel('Wavelength','FontName','Helvetiaca','FontSize',18);
 ylabel('Radiance','FontName','Helvetiaca','FontSize',18);
-%title('Primary spds','FontName','Helvetiaca','FontSize',20);
-legend({'Background', 'Mel Increase', 'Mel Decrease'},'FontName','Helvetiaca','FontSize',12,'Location','NorthWest');
-xlim([380 720]);
+title(conditionName,'FontName','Helvetiaca','FontSize',20);
+legend({'Background', 'Mod Increase', 'Mod Decrease'},'FontName','Helvetiaca','FontSize',12,'Location','NorthWest');
+xlim([380 720]); ylim([0 3e-3]);
 saveas(gcf,fullfile(outputDir,'modulationSpds.tiff'),'tiff');
-
 
 % Check that we can recover the settings from the spectral power
 % distributions, etc.  This won't necessarily work perfectly, but should be
@@ -513,7 +514,7 @@ plot(colorDirectionParams.wls, screenPrimaryChannelObject.screenPrimarySpd(:,3),
 plot(colorDirectionParams.wls, screenPrimarySpdCheck,'k','LineWidth',2);
 xlabel('Wavelength','FontName','Helvetiaca','FontSize',18);
 ylabel('Radiance','FontName','Helvetiaca','FontSize',18);
-%title('Primary spds','FontName','Helvetiaca','FontSize',20);
+title(conditionName,'FontName','Helvetiaca','FontSize',20);
 legend({'Primary 1', 'Primary 2', 'Primary 3'},'FontName','Helvetiaca','FontSize',12,'Location','NorthWest');
 saveas(gcf,fullfile(outputDir,'primarySpds.tiff'),'tiff');
 
