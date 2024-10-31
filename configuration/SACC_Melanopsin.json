@@ -30,7 +30,7 @@
 		"hook": "",
 		"importance": "",
 		"localHookTemplate": "",
-		"name": "ISETBioCSFGenerator-cam",
+		"name": "ISETBioCSFGenerator-isetbiostandalone",
 		"pathPlacement": "append",
 		"subfolder": "",
 		"toolboxRoot": "",
